@@ -1,0 +1,29 @@
+This tool requires building it yourself on the container. There are two ways to do that..
+
+Note* This tool only works on RHEL 8+
+
+First Way:
+    - Run the script ./scripts/external_dependencies/tldr/upgrade_tldr.zsh
+    - This will handle everything
+Second Way:
+    - Manually follow the instructions below
+    - Note: The script above is just an automated version of the below instructions.
+        So in a sense, the below instrucitons are pseudo code and can be used to debug if something goes wrong.
+
+1. Boot into rocky8 container
+2. Run the command "sudo su" to log in as the super user
+3. Run the command "dnf install -y cargo"
+4. Run the command "dnf install -y unzip"
+5. Run the command "exit" to get back to the user vagrant
+6. Get the tag of the latest release from (https://github.com/tldr-pages/tlrc/releases/latest)
+    then git clone it with the syntax "git clone --branch <tag_name> https://github.com/tldr-pages/tlrc.git"
+6. In the directory with the code run the command "cargo build" to build tldr
+7. Copy/Replace the ./target/debug/tldr binary into the wcs-zsh repository in external_dependencies/bin/
+8. Delete the cloned git repository
+9. Run the command "curl --location --output ./pages.zip "https://github.com/tldr-pages/tldr/releases/latest/download/tldr-pages.en.zip"" to download the newest tldr pages in zip format
+10. Run the command "mkdir tlrc; cd tlrc; unzip ./pages.zip -d ./pages.en/" to unzip those pages into a directory named pages.en inside of tlrc
+11. Copy/Replace the ./tlrc/ directory into the wcs-zsh repository in external_dependencies/tldr/
+12. Confirm that the updated binary works on all supported OS (Rocky8, Rocky9)
+13. Submit tldr version to EFOSS for approval
+14. Submit tldr version to security for SSP-39 approval
+15. Submit a merge request
